@@ -34,6 +34,7 @@ class FilmController extends Controller
                 };
             });
         }
-        return view('spkrekom.index', compact('movies'));
+        $imageBaseUrl = env('TMDB_IMAGE_URL');
+        return view('spkrekom.index', compact('movies', 'imageBaseUrl'));
     }
 }

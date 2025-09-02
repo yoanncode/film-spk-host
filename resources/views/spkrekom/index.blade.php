@@ -423,7 +423,7 @@
           @foreach ($movies as $movie)
           <div class="col">
             <div class="card h-100">
-              <img src="{{ env('TMDB_IMAGE_URL') }}/w300{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}">
+             <img src="{{ $imageBaseUrl }}/w300{{ $movie['poster_path'] }}">
               <div class="card-body">
                 <h5 class="card-title">{{ $movie['title'] }}</h5>
                   <div class="rating">
@@ -431,7 +431,7 @@
                     <span>{{ number_format($movie['vote_average']) }}</span>
                     <small class="text-secondary">{{ date('Y', strtotime($movie['release_date'])) }}</small>
                   </div>
-                <p class="card-text">{{ Str::limit($movie['overview'], 100) }}</p>
+                <p class="card-text">{{ \Illuminate\Support\Str::limit($movie['overview'], 100) }}</p>
               </div>
             </div>
           </div>
