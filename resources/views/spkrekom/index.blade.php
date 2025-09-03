@@ -298,9 +298,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-color fixed-top">
       <div class="container">
         <a class="navbar-brand fs-4 glow-text" href="#">MHSmovie.</a>
-        <button class="navbar-toggler shadow-none border-0" type="button" 
-                data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" 
-                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+        <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="sidebar offcanvas offcanvas-start bg-dark" tabindex="-1" 
