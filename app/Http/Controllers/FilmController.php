@@ -60,6 +60,7 @@ class FilmController extends Controller
 
             return view('spkrekom.index', [
                 'movies' => $movies,
+                'imageBaseUrl' => $imageUrl,
             ]);
         } catch (Exception $e) {
             return response()->json([
