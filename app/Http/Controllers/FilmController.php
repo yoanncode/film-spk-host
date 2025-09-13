@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Cache; // <-- WAJIB biar Cache bisa dipakai
 
 class FilmController extends Controller
 {
@@ -19,7 +19,7 @@ class FilmController extends Controller
         $duration = $request->input('duration');
         $rating   = $request->input('rating');
 
-        // Ambil daftar film (discover API, runtime TIDAK ada di sini)
+        // Ambil daftar film dari API TMDB (runtime belum ada di sini)
         $response = Http::get("$baseUrl/discover/movie", [
             'api_key'        => $apiKey,
             'with_genres'    => $genre,
@@ -29,12 +29,11 @@ class FilmController extends Controller
 
         $movies = $response->json()['results'] ?? [];
 
-        // Batasi jumlah film untuk menghindari terlalu banyak request
+        // Batasi jumlah film agar tidak terlalu banyak request detail
         $movies = array_slice($movies, 0, 12);
 
-        // Ambil detail tiap film supaya dapat runtime
+        // Ambil detail runtime tiap film
         $movies = array_map(function ($movie) use ($apiKey, $baseUrl, $imageUrl) {
-            // Cache runtime agar tidak request berulang ke TMDB
             $detail = Cache::remember("movie_detail_{$movie['id']}", 3600, function () use ($apiKey, $baseUrl, $movie) {
                 $detailResponse = Http::get("$baseUrl/movie/{$movie['id']}", [
                     'api_key' => $apiKey,
@@ -43,7 +42,7 @@ class FilmController extends Controller
                 return $detailResponse->successful() ? $detailResponse->json() : [];
             });
 
-            // Tambahkan runtime & poster yang lengkap
+            // Tambahkan runtime & poster URL
             $movie['runtime'] = $detail['runtime'] ?? null;
             $movie['poster_path'] = $movie['poster_path']
                 ? $imageUrl . '/w500' . $movie['poster_path']
@@ -52,10 +51,10 @@ class FilmController extends Controller
             return $movie;
         }, $movies);
 
-        // Filter berdasarkan durasi (optional)
+        // Filter berdasarkan durasi
         if ($duration) {
             $movies = array_filter($movies, function ($movie) use ($duration) {
-                // Kalau runtime null → tetap tampil
+                // Kalau runtime kosong/null → tetap tampil
                 if (!isset($movie['runtime']) || $movie['runtime'] === null) {
                     return true;
                 }
