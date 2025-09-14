@@ -543,7 +543,7 @@
     const genre = form.querySelector('select[name="genre"]').value;
     const rating = form.querySelector('input[name="rating"]').value;
     const year = form.querySelector('select[name="year"]').value;
-    const language = form.querySelector('select[name="language"]:checked');
+    const language = form.querySelector('select[name="language"]').value;
 
     if (!genre || !rating || !year || !language) {
       e.preventDefault();
