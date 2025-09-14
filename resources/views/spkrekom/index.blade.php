@@ -393,19 +393,16 @@
             <div class="col-md-6 col-lg-5">
               <div class="card custom-card h-100">
                 <div class="card-body d-flex flex-column">
-                  <h5 class="mb-3"><i class="bi bi-clock-history text-danger"></i> Duration</h5>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="duration" value="short" id="short">
-                    <label class="form-check-label" for="short">Short (&lt; 90 min)</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="duration" value="medium" id="medium">
-                    <label class="form-check-label" for="medium">Medium (90-120 min)</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="duration" value="long" id="long">
-                    <label class="form-check-label" for="long">Long (&gt; 120 min)</label>
-                  </div>
+                  <h5 class="mb-3"><i class="bi bi-translate text-danger"></i> Language</h5>
+                  <select name="language" class="form-select custom-select">
+                    <option value="">Select Language</option>
+                    <option value="en">English</option>
+                    <option value="id">Indonesian</option>
+                    <option value="ko">Korean</option>
+                    <option value="ja">Japanese</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                  </select>
                 </div>
               </div>
             </div>

@@ -14,15 +14,32 @@ class FilmController extends Controller
             $apiKey   = env('TMDB_API_KEY');
             $imageUrl = env('TMDB_IMAGE_URL');
             $genre    = $request->input('genre');
-            $duration = $request->input('duration');
             $rating   = $request->input('rating');
+            $year     = $request->input('year');
+            $language = $request->input('language'); // 🔹 ganti duration jadi language
 
-            $response = Http::get("https://api.themoviedb.org/3/discover/movie", [
+            $queryParams = [
                 'api_key'          => $apiKey,
                 'with_genres'      => $genre,
                 'vote_average.gte' => $rating,
                 'sort_by'          => 'popularity.desc',
-            ]);
+            ];
+
+            // 🔹 Filter berdasarkan tahun rilis (range)
+            if ($year) {
+                $yearRange = explode('-', $year);
+                if (count($yearRange) == 2) {
+                    $queryParams['primary_release_date.gte'] = $yearRange[0] . "-01-01";
+                    $queryParams['primary_release_date.lte'] = $yearRange[1] . "-12-31";
+                }
+            }
+
+            // 🔹 Filter bahasa
+            if ($language) {
+                $queryParams['with_original_language'] = $language;
+            }
+
+            $response = Http::get("https://api.themoviedb.org/3/discover/movie", $queryParams);
 
             if ($response->failed()) {
                 throw new Exception('TMDB API error: ' . $response->status());
@@ -37,26 +54,12 @@ class FilmController extends Controller
 
                 $detailJson = $detail->json();
 
-                $movie['runtime'] = $detailJson['runtime'] ?? null;
                 $movie['poster_path'] = $movie['poster_path']
                     ? $imageUrl . '/w500' . $movie['poster_path']
                     : null;
 
                 return $movie;
             }, $movies);
-
-            if ($duration) {
-                $movies = array_filter($movies, function ($movie) use ($duration) {
-                    if (!isset($movie['runtime']) || $movie['runtime'] === null) return false;
-
-                    return match ($duration) {
-                        'short'  => $movie['runtime'] < 90,
-                        'medium' => $movie['runtime'] >= 90 && $movie['runtime'] <= 120,
-                        'long'   => $movie['runtime'] > 120,
-                        default  => true,
-                    };
-                });
-            }
 
             return view('spkrekom.index', [
                 'movies' => $movies,
