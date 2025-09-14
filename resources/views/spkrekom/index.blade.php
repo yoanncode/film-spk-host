@@ -543,9 +543,9 @@
     const genre = form.querySelector('select[name="genre"]').value;
     const rating = form.querySelector('input[name="rating"]').value;
     const year = form.querySelector('select[name="year"]').value;
-    const duration = form.querySelector('input[name="duration"]:checked');
+    const language = form.querySelector('input[name="language"]:checked');
 
-    if (!genre || !rating || !year || !duration) {
+    if (!genre || !rating || !year || !language) {
       e.preventDefault();
       Swal.fire({
         icon: 'warning',
