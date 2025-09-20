@@ -541,7 +541,7 @@
 
   form.addEventListener('submit', function (e) {
     const genre = form.querySelector('select[name="genre"]').value;
-    const rating = form.querySelector('input[name="rating"]').value;
+    const rating = form.querySelector('input[name="rating"]').value || 5;
     const year = form.querySelector('select[name="year"]').value;
     const language = form.querySelector('select[name="language"]').value;
 
