@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Https\Controllers;
+namespace App\Http\Controllers;
 
-use Illuminate\Https\Request;
-use Illuminate\Support\Facades\Https;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Exception;
 
 class FilmController extends Controller
@@ -16,7 +16,8 @@ class FilmController extends Controller
             $genre    = $request->input('genre');
             $rating   = $request->input('rating');
             $year     = $request->input('year');
-            $language = $request->input('language');
+            $language = $request->input('language'); 
+
             $queryParams = [
                 'api_key'          => $apiKey,
                 'with_genres'      => $genre,
@@ -36,18 +37,21 @@ class FilmController extends Controller
                 $queryParams['with_original_language'] = $language;
             }
 
-            $response = Https::get("https://api.themoviedb.org/3/discover/movie", $queryParams);
+            $response = Http::get("https://api.themoviedb.org/3/discover/movie", $queryParams);
+
             if ($response->failed()) {
                 throw new Exception('TMDB API error: ' . $response->status());
             }
 
             $movies = $response->json()['results'] ?? [];
+
             $movies = array_map(function ($movie) use ($apiKey, $imageUrl) {
-                $detail = Https::get("https://api.themoviedb.org/3/movie/{$movie['id']}", [
+                $detail = Http::get("https://api.themoviedb.org/3/movie/{$movie['id']}", [
                     'api_key' => $apiKey,
                 ]);
 
                 $detailJson = $detail->json();
+
                 $movie['poster_path'] = $movie['poster_path']
                     ? $imageUrl . '/w500' . $movie['poster_path']
                     : null;
